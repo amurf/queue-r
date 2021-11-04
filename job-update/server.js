@@ -16,7 +16,7 @@ io.on("connection", async function (socket) {
 
   if (doc) {
     socket.emit("update", "order received");
-    socket.join(`update:${socket.handshake.query.id}`);
+    socket.join(`update:${id}`);
   } else {
     socket.emit("error", "invalid id");
   }
