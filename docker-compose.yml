@@ -1,0 +1,118 @@
+version: '3.7'
+
+networks:
+  app:
+  mongo:
+
+
+services:
+  frontend:
+    build:
+      context: frontend
+    command: npm run dev
+    volumes:
+      - ./frontend/src/:/app/src
+    ports:
+      - 3000:3000 # this is for vite hot reloading
+    networks:
+      - app
+    labels:
+      traefik.enable: true
+      traefik.http.services.frontend.loadbalancer.server.port: 3000
+      traefik.http.routers.frontend.entrypoints: web
+      traefik.http.routers.frontend.rule: PathPrefix(`/`)
+      traefik.http.routers.frontend.priority: 1001
+      traefik.http.routers.frontend.middlewares: frontend@docker
+      traefik.http.middlewares.frontend.stripprefix.prefixes: /
+      traefik.tags: waitoutside
+
+
+  job-submit:
+    build:
+      context: job-submit
+    command: node /app/server.js
+    restart: always
+    volumes:
+      - ./job-submit/server.js:/app/server.js:ro
+    environment:
+      API_MONGODB_URL: mongodb://waitoutside:thepassword@mongo:27017/waitoutside?replicaSet=replicaset
+      FRONTEND_HOST: http://marylou.local:8885
+    networks:
+      - app
+      - mongo
+    labels:
+      traefik.enable: true
+      traefik.http.services.submit.loadbalancer.server.port: 3000
+      traefik.http.routers.submit.entrypoints: web
+      traefik.http.routers.submit.rule: PathPrefix(`/submit/`)
+      traefik.http.routers.submit.priority: 1002
+      traefik.http.routers.submit.middlewares: submit@docker
+      traefik.http.middlewares.submit.stripprefix.prefixes: /submit/
+      traefik.tags: waitoutside
+
+  job-update:
+    build:
+      context: job-update
+    command: node /app/server.js
+    restart: always
+    volumes:
+      - ./job-update/server.js:/app/server.js:ro
+    environment:
+      API_MONGODB_URL: mongodb://waitoutside:thepassword@mongo:27017/waitoutside?replicaSet=replicaset
+    networks:
+      - app
+      - mongo
+    labels:
+      traefik.enable: true
+      traefik.http.services.update.loadbalancer.server.port: 3000
+      traefik.http.routers.update.entrypoints: web
+      traefik.http.routers.update.rule: PathPrefix(`/update/`)
+      traefik.http.routers.update.priority: 1002
+      traefik.http.routers.update.middlewares: update@docker
+      traefik.http.middlewares.update.stripprefix.prefixes: /update/
+      traefik.tags: waitoutside
+
+  mongo:
+    image: bitnami/mongodb
+    volumes:
+      - ./docker/mongo-init.js:/docker-entrypoint-initdb.d/init.js
+    environment:
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_REPLICA_SET_KEY: replicasetkey123
+      MONGODB_ROOT_PASSWORD: thepasswordest
+      MONGODB_DATABASE: waitoutside
+      MONGODB_USERNAME: waitoutside
+      MONGODB_PASSWORD: thepassword
+    networks:
+      - mongo
+
+  mongo_express:
+    image: mongo-express
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://waitoutside:thepassword@mongo:27017/waitoutside?replicaSet=replicaset
+    ports:
+      - 8081:8081
+    networks:
+      - mongo
+    restart: always
+
+  proxy:
+    image: traefik:v2.2
+    command:
+      - --api=true
+      - --api.insecure=true
+      - --api.dashboard=true
+      - --api.debug=true
+        #- --log.level=DEBUG
+      - --providers.docker=true
+      - --providers.docker.swarmMode=false
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.constraints=Label(`traefik.tags`,`waitoutside`)
+      - --entrypoints.web.address=:80
+    ports:
+      - 8885:80
+      - 8886:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - app
