@@ -30,7 +30,7 @@ services:
   job-submit:
     build:
       context: job-submit
-    command: node /app/server.js
+    command: npm run dev
     restart: always
     volumes:
       - ./job-submit/server.js:/app/server.js:ro
@@ -53,7 +53,7 @@ services:
   job-update:
     build:
       context: job-update
-    command: node /app/server.js
+    command: npm run dev
     restart: always
     volumes:
       - ./job-update/server.js:/app/server.js:ro
