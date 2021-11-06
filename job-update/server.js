@@ -5,10 +5,17 @@ const { Server } = require("socket.io");
 const io = new Server(3000, {});
 
 io.on("connection", async function (socket) {
+  const id = socket.handshake.query.id;
+
+  // This is for handling the auto close
+  if (socket.handshake.query.waitingForClose) {
+    socket.join(`close:${id}`);
+    return;
+  }
+
   const client = new MongoClient(MONGO_URI);
   await client.connect();
 
-  const id = socket.handshake.query.id;
   const doc = await client
     .db("waitoutside")
     .collection("waiting")
@@ -17,6 +24,7 @@ io.on("connection", async function (socket) {
   if (doc) {
     socket.emit("update", "order received");
     socket.join(`update:${id}`);
+    io.to(`close:${id}`).emit("closeWindow", true);
   } else {
     socket.emit("error", "invalid id");
   }
