@@ -1,4 +1,5 @@
 const Koa = require("koa");
+const Router = require("@koa/router");
 const koaBody = require("koa-body");
 
 const { nanoid } = require("nanoid");
@@ -18,31 +19,57 @@ app.use(
   })
 );
 
-app.use(async (ctx) => {
-  if (ctx.path == "/job") {
-    const client = new MongoClient(MONGO_URI);
-    await client.connect();
+const router = new Router();
+router.get("/qr/:id", generateQR);
+router.post("/job", addJob);
+router.put("/job", updateJob);
 
-    const body = ctx.request.body;
-    const _id = nanoid();
-
-    createListing(client, { ...body, _id });
-
-    const filename = `${_id}.svg`;
-    const file = await QRCode.toFile(
-      filename,
-      `${FRONTEND_HOST}/w/${_id}`,
-      function (err, string) {
-        if (err) throw err;
-        console.log("done");
-      }
-    );
-
-    ctx.body = createReadStream(filename);
-  }
-});
-
+app.use(router.routes()).use(router.allowedMethods());
 app.listen(3000);
+
+async function generateQR(ctx) {
+  const _id = ctx.request.body.id;
+  const filename = `${_id}.svg`;
+
+  console.log(filename);
+  const file = await QRCode.toFile(
+    filename,
+    `${FRONTEND_HOST}/w/${_id}`,
+    function (err, string) {
+      if (err) throw err;
+      console.log("done");
+    }
+  );
+
+  ctx.body = createReadStream(filename);
+}
+
+async function addJob(ctx) {
+  const client = new MongoClient(MONGO_URI);
+  await client.connect();
+
+  const body = ctx.request.body;
+  const _id = nanoid();
+
+  createListing(client, { ...body, _id });
+
+  ctx.body = { id: _id };
+}
+
+async function updateJob(ctx) {
+  const client = new MongoClient(MONGO_URI);
+  await client.connect();
+
+  const body = ctx.request.body;
+  const _id = nanoid();
+
+  client
+    .db("waitoutside")
+    .collection("waiting")
+    .updateOne({ _id }, { $set: { status: ctx.request.body.status } });
+
+  ctx.body = createReadStream(filename);
+}
 
 async function createListing(client, object) {
   const result = await client
