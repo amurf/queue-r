@@ -75,14 +75,14 @@ async function updateJob(ctx) {
   await client.connect();
 
   const body = ctx.request.body;
-  const _id = nanoid();
+  const _id = body._id;
 
-  client
+  await client
     .db("waitoutside")
     .collection("waiting")
-    .updateOne({ _id }, { $set: { status: ctx.request.body.status } });
+    .updateOne({ _id }, { $set: { ...ctx.request.body } });
 
-  ctx.body = createReadStream(filename);
+  ctx.body = { success: true };
 }
 
 async function createListing(client, object) {

@@ -4,6 +4,19 @@ import axios from "axios";
 
 let jobs = ref([]);
 
+async function updateJob(job) {
+  axios.put("/submit/job", job);
+}
+
+async function updateAllJobs() {
+  const status = ["Started", "In progress", "Delayed", "Completed"];
+
+  for (let job of jobs.value) {
+    job.status = status[Math.floor(Math.random() * status.length)];
+    updateJob(job);
+  }
+}
+
 async function getJobs() {
   let { data } = await axios.get("/submit/job");
   jobs.value = data;
@@ -14,6 +27,8 @@ getJobs();
 
 <template>
   <div class="w-full h-screen flex flex-col justify-center items-center px-5">
+    <button @click="updateAllJobs">Random!</button>
+
     <table>
       <thead>
         <th>name</th>
@@ -28,6 +43,9 @@ getJobs();
           <td>{{ job.status }}</td>
           <td>{{ job.items }}</td>
           <td>{{ job.created_at }}</td>
+          <td>
+            <button @click="updateJob(job)">Update</button>
+          </td>
         </tr>
       </tbody>
     </table>
