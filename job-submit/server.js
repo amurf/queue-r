@@ -20,7 +20,9 @@ app.use(
 );
 
 const router = new Router();
+
 router.get("/qr/:id", generateQR);
+router.get("/job", getJob);
 router.post("/job", addJob);
 router.put("/job", updateJob);
 
@@ -31,7 +33,6 @@ async function generateQR(ctx) {
   const _id = ctx.request.body.id;
   const filename = `${_id}.svg`;
 
-  console.log(filename);
   const file = await QRCode.toFile(
     filename,
     `${FRONTEND_HOST}/w/${_id}`,
@@ -42,6 +43,19 @@ async function generateQR(ctx) {
   );
 
   ctx.body = createReadStream(filename);
+}
+
+async function getJob(ctx) {
+  const client = new MongoClient(MONGO_URI);
+  await client.connect();
+
+  const docs = await client
+    .db("waitoutside")
+    .collection("waiting")
+    .find({ client: "ClientName" })
+    .toArray();
+
+  ctx.body = docs;
 }
 
 async function addJob(ctx) {
