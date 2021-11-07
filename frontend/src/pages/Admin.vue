@@ -4,9 +4,8 @@ import axios from "axios";
 
 const order = reactive({
   items: ["Flat white", "Peanut butter brownie"],
+  client: "ClientName",
   name: "",
-  qrCode: "",
-  submitted: false,
 });
 
 function reset() {
@@ -15,9 +14,7 @@ function reset() {
 }
 
 async function submit() {
-  let { data } = await axios.post("/submit/job", {
-    name: order.name,
-  });
+  let { data } = await axios.post("/submit/job", { ...order });
 
   window.open(`/qr/${data.id}?name=${order.name}`);
   reset();
