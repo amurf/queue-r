@@ -41,7 +41,13 @@ async function startWatcher(io) {
     .collection("waiting")
     .watch([], {})
     .on("change", function (change) {
-      const doc = change.fullDocument;
+      let doc;
+      if (change.operationType == "update") {
+        doc = change.updateDescription.updatedFields;
+        doc._id = change.documentKey._id;
+      } else {
+        doc = change.fullDocument;
+      }
       io.to(`update:${doc._id}`).emit("update", doc.status);
     });
 }
