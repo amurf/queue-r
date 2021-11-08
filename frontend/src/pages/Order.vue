@@ -22,7 +22,7 @@ async function submit() {
 </script>
 
 <template>
-  <div class="w-full h-screen flex flex-col justify-center items-center px-5">
+  <div class="flex flex-col items-center justify-center w-full h-screen px-5">
     <template v-if="order.submitted">
       <div v-html="order.qrCode" class="qrcode-container"></div>
       <p>
@@ -30,25 +30,25 @@ async function submit() {
         we'll let you know when it's ready
       </p>
 
-      <button @click="reset()" class="border p-2 bg-blue-200 rounded shadow">
+      <button @click="reset()" class="p-2 bg-blue-200 border rounded shadow">
         Next order
       </button>
     </template>
     <template v-else>
-      <div class="border shadow p-4 mb-2">
-        <h1 class="font-bold text-lg">Order</h1>
+      <div class="p-4 mb-2 border shadow">
+        <h1 class="text-lg font-bold">Order</h1>
         <ul>
           <li v-for="item in order.items">{{ item }}</li>
         </ul>
       </div>
 
       <form @submit.prevent="submit()" class="flex flex-col text-center">
-        <label for="name" class="font-bold text-lg">Customer name</label>
+        <label for="name" class="text-lg font-bold">Customer name</label>
         <input
           type="text"
           v-model="order.name"
           id="name"
-          class="border shadow p-2"
+          class="p-2 border shadow"
         />
 
         <button

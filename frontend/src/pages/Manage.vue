@@ -26,17 +26,17 @@ getJobs();
 </script>
 
 <template>
-  <div class="w-full h-screen flex flex-col justify-center items-center px-5">
+  <div class="flex flex-col items-center justify-center w-full h-screen px-5">
     <div class="demo-buttons">
       <button
         @click="updateAllJobs"
-        class="border p-2 rounded shadow bg-purple-200 text-sm font-semibold"
+        class="p-2 text-sm font-semibold bg-purple-200 border rounded shadow"
       >
         Random status
       </button>
     </div>
 
-    <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+    <div class="inline-block min-w-full overflow-hidden rounded-lg shadow">
       <table class="min-w-full leading-normal table-fixed">
         <thead>
           <th>Name</th>
@@ -66,17 +66,7 @@ getJobs();
             <td>
               <button
                 @click="updateJob(job)"
-                class="
-                  capitalize
-                  text-xs
-                  shadow
-                  rounded
-                  p-2
-                  font-semibold
-                  border
-                  bg-gray-100
-                  text-gray-600
-                "
+                class="p-2 text-xs font-semibold text-gray-600 capitalize bg-gray-100 border rounded shadow "
               >
                 Update
               </button>
