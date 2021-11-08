@@ -36,7 +36,7 @@ services:
       - ./job-submit/server.js:/app/server.js:ro
     environment:
       API_MONGODB_URL: mongodb://waitoutside:thepassword@mongo:27017/waitoutside?replicaSet=replicaset
-      FRONTEND_HOST: http://marylou.local:8885
+      FRONTEND_HOST: http://localhost:8885
     networks:
       - app
       - mongo
@@ -59,7 +59,7 @@ services:
       - ./job-update/server.js:/app/server.js:ro
     environment:
       API_MONGODB_URL: mongodb://waitoutside:thepassword@mongo:27017/waitoutside?replicaSet=replicaset
-      FRONTEND_HOST: http://marylou.local:8885
+      FRONTEND_HOST: http:///localhost:8885
     networks:
       - app
       - mongo

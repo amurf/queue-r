@@ -23,7 +23,7 @@ socket.on("closeWindow", () => window.close());
 const route = useRoute();
 
 // XXX: Don't hardcore this
-const url = "http://marylou.local:8885/w/" + props.id;
+const url = "http://localhost:8885/w/" + props.id;
 const qrCode: String = ref("");
 
 async function getQR() {
