@@ -27,39 +27,73 @@ getJobs();
 
 <template>
   <div class="w-full h-screen flex flex-col justify-center items-center px-5">
-    <button @click="updateAllJobs">Random!</button>
+    <div class="demo-buttons">
+      <button
+        @click="updateAllJobs"
+        class="border p-2 rounded shadow bg-purple-200 text-sm font-semibold"
+      >
+        Random status
+      </button>
+    </div>
 
-    <table>
-      <thead>
-        <th>name</th>
-        <th>status</th>
-        <th>items</th>
-        <th>created</th>
-        <th></th>
-      </thead>
-      <tbody>
-        <tr v-for="job in jobs">
-          <td>{{ job.name }}</td>
-          <td>{{ job.status }}</td>
-          <td>{{ job.items }}</td>
-          <td>{{ job.created_at }}</td>
-          <td>
-            <button @click="updateJob(job)">Update</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+      <table class="min-w-full leading-normal table-fixed">
+        <thead>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Items</th>
+          <th>Created</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <tr v-for="job in jobs" class="bg-white">
+            <td>{{ job.name }}</td>
+            <td>
+              <template v-if="job.items.length == 1">
+                {{ job.items }}
+              </template>
+
+              <template v-else>
+                <ul>
+                  <li v-for="item in job.items">
+                    {{ item }}
+                  </li>
+                </ul>
+              </template>
+            </td>
+            <td>{{ job.status }}</td>
+            <td>{{ job.created_at }}</td>
+            <td>
+              <button
+                @click="updateJob(job)"
+                class="
+                  capitalize
+                  text-xs
+                  shadow
+                  rounded
+                  p-2
+                  font-semibold
+                  border
+                  bg-gray-100
+                  text-gray-600
+                "
+              >
+                Update
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.qrcode-container {
-  width: 30%;
+th {
+  @apply px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 tracking-wider capitalize;
 }
 
-@media only screen and (max-width: 600px) {
-  .qrcode-container {
-    width: 100%;
-  }
+td {
+  @apply px-5 py-5 border-b border-gray-200 text-sm;
 }
 </style>
