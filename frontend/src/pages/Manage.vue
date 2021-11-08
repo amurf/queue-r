@@ -27,7 +27,7 @@ getJobs();
 
 <template>
   <div class="flex flex-col items-center justify-center w-full h-screen px-5">
-    <div class="demo-buttons">
+    <div class="m-2 demo-buttons">
       <button
         @click="updateAllJobs"
         class="p-2 text-sm font-semibold bg-purple-200 border rounded shadow"
@@ -66,7 +66,17 @@ getJobs();
             <td>
               <button
                 @click="updateJob(job)"
-                class="p-2 text-xs font-semibold text-gray-600 capitalize bg-gray-100 border rounded shadow "
+                class="
+                  p-2
+                  text-xs
+                  font-semibold
+                  text-gray-600
+                  capitalize
+                  bg-gray-100
+                  border
+                  rounded
+                  shadow
+                "
               >
                 Update
               </button>
