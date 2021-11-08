@@ -42,8 +42,6 @@ socket.on("error", (newStatus) => {
         Your order is being prepared
       </h1>
 
-      <p v-if="error">Something went wrong :(</p>
-      <p v-else>{{ status }}</p>
       <p class="w-full border-purple-200 border-t p-2 text-center">
         <template v-if="error">Something went wrong</template>
         <template v-else>
