@@ -26,8 +26,30 @@ socket.on("error", (newStatus) => {
 </script>
 
 <template>
-  <h1>Track</h1>
+  <div class="flex flex-col items-center justify-center w-full h-screen px-5">
+    <div
+      class="
+        flex flex-col
+        items-center
+        w-1/2
+        bg-purple-100
+        border
+        rounded
+        shadow
+      "
+    >
+      <h1 class="p-2 text-xl font-bold border border-bottom">
+        Your order is being prepared
+      </h1>
 
-  <p v-if="error">Something went wrong :(</p>
-  <p v-else>{{ status }}</p>
+      <p v-if="error">Something went wrong :(</p>
+      <p v-else>{{ status }}</p>
+      <p class="w-full border-purple-200 border-t p-2 text-center">
+        <template v-if="error">Something went wrong</template>
+        <template v-else>
+          {{ status }}
+        </template>
+      </p>
+    </div>
+  </div>
 </template>
