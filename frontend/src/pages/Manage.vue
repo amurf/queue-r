@@ -2,9 +2,9 @@
 import { ref } from "vue";
 import axios from "axios";
 
-let jobs = ref([]);
+let jobs = ref([{ status: "", items: [], created_at: "", name: "" }]);
 
-async function updateJob(job) {
+async function updateJob(job: Object) {
   axios.put("/submit/job", job);
 }
 

@@ -12,9 +12,9 @@ const props = defineProps({
   },
 });
 
-const socket = io({
+const socket = io("/", {
   path: "/update/socket.io/",
-  query: { id: props.id, waitingForClose: true },
+  query: { id: props.id, waitingForClose: "true" },
 });
 
 // once qr is scanned close window?
@@ -24,7 +24,7 @@ const route = useRoute();
 
 // XXX: Don't hardcore this
 const url = "http://localhost:8885/w/" + props.id;
-const qrCode: String = ref("");
+const qrCode = ref("");
 
 async function getQR() {
   let { data } = await axios.get(`/submit/qr/${route.params.id}`);

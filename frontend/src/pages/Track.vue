@@ -9,8 +9,8 @@ const props = defineProps({
   },
 });
 
-const status: String = ref("");
-const error: String = ref("");
+const status = ref("");
+const error = ref("");
 
 const socket = io({
   path: "/update/socket.io/",

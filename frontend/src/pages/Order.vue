@@ -10,7 +10,6 @@ const order = reactive({
 
 function reset() {
   order.name = "";
-  order.qrCode = "";
 }
 
 async function submit() {
