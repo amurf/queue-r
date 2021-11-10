@@ -9,7 +9,7 @@ services:
   frontend:
     build:
       context: frontend
-    command: npm run dev
+      target: devel-builder
     volumes:
       - ./frontend/src/:/app/src
     ports:
