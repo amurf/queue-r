@@ -35,10 +35,10 @@ io.on("connection", async function (socket) {
 startWatcher(io);
 
 async function startWatcher(io) {
-  const mongo = new MongoClient(MONGO_URI);
-  await mongo.connect();
+  const client = new MongoClient(MONGO_URI);
+  await client.connect();
 
-  mongo
+  client
     .db("waitoutside")
     .collection("waiting")
     .watch([], {})
