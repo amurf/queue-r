@@ -27,7 +27,6 @@ async function generateQR(ctx) {
     `${FRONTEND_HOST}/w/${_id}`,
     function (err, string) {
       if (err) throw err;
-      console.log("done");
     }
   );
 
