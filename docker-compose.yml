@@ -33,7 +33,8 @@ services:
     command: npm run dev
     restart: always
     volumes:
-      - ./job-submit/server.js:/app/server.js:ro
+      - ./job-submit/index.js:/app/index.js:ro
+      - ./job-submit/src:/app/src:ro
     environment:
       API_MONGODB_URL: mongodb://waitoutside:thepassword@mongo:27017/waitoutside?replicaSet=replicaset
       FRONTEND_HOST: http://localhost:8885
