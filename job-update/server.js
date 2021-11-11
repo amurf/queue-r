@@ -28,6 +28,8 @@ io.on("connection", async function (socket) {
   } else {
     socket.emit("error", "invalid id");
   }
+
+  client.close();
 });
 
 startWatcher(io);
