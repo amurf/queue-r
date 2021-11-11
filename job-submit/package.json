@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "test": "jest --detectOpenHandles"
   },
   "dependencies": {
     "@koa/router": "^10.1.1",
