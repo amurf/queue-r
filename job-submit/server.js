@@ -30,7 +30,7 @@ app.use(router.routes()).use(router.allowedMethods());
 app.listen(3000);
 
 async function generateQR(ctx) {
-  const _id = ctx.request.body.id;
+  const _id = ctx.params.id;
   const filename = `${_id}.svg`;
 
   const file = await QRCode.toFile(
