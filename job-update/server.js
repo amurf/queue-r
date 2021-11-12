@@ -1,5 +1,6 @@
 const { MongoClient } = require("mongodb");
 const MONGO_URI = process.env.MONGO_URI;
+const client = new MongoClient(MONGO_URI);
 
 const { Server } = require("socket.io");
 const io = new Server(3000, {});
@@ -13,9 +14,7 @@ io.on("connection", async function (socket) {
     return;
   }
 
-  const client = new MongoClient(MONGO_URI);
   await client.connect();
-
   const doc = await client
     .db("waitoutside")
     .collection("waiting")
@@ -35,7 +34,6 @@ io.on("connection", async function (socket) {
 startWatcher(io);
 
 async function startWatcher(io) {
-  const client = new MongoClient(MONGO_URI);
   await client.connect();
 
   client
