@@ -1,5 +1,5 @@
 const { MongoClient } = require("mongodb");
-const MONGO_URI = process.env.API_MONGODB_URL;
+const MONGO_URI = process.env.MONGO_URI;
 
 const { Server } = require("socket.io");
 const io = new Server(3000, {});
