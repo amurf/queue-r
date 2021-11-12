@@ -13,4 +13,5 @@ COPY . /app
 RUN npm run build
 
 FROM nginx:stable-alpine
+COPY nginx-default.conf /etc/nginx/conf.d/default.conf
 COPY --from=production-build /app/dist /usr/share/nginx/html/
