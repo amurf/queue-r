@@ -14,7 +14,6 @@ module.exports = router;
 const { nanoid } = require("nanoid");
 const QRCode = require("qrcode");
 const { createReadStream } = require("fs");
-const { mongoClient } = require("./mongo");
 
 const FRONTEND_HOST = process.env.FRONTEND_HOST; // TODO: config.js
 
@@ -34,50 +33,38 @@ async function generateQR(ctx) {
 }
 
 async function getJob(ctx) {
-  const client = await mongoClient();
-
-  const docs = await client
+  const docs = await ctx.mongo
     .db("waitoutside")
     .collection("waiting")
     .find({ client: "ClientName" })
     .toArray();
 
-  client.close();
-
   ctx.body = docs;
 }
 
 async function addJob(ctx) {
-  const client = await mongoClient();
-
   const body = ctx.request.body;
   const _id = nanoid();
 
-  await createListing(client, { ...body, _id });
-
-  client.close();
+  await createListing(ctx.mongo, { ...body, _id });
 
   ctx.body = { id: _id };
 }
 
 async function updateJob(ctx) {
-  const client = await mongoClient();
-
   const body = ctx.request.body;
   const _id = body._id;
 
-  await client
+  await ctx.mongo
     .db("waitoutside")
     .collection("waiting")
     .updateOne({ _id }, { $set: { ...ctx.request.body } });
 
-  client.close();
-
   ctx.body = { success: true };
 }
 
-async function createListing(client, object) {
-  const result = await client
+async function createListing(mongo, object) {
+  const result = await mongo
     .db("waitoutside")
     .collection("waiting")
     .insertOne({ ...object, status: "started", created_at: new Date() });

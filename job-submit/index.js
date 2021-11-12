@@ -1,2 +1,3 @@
 const server = require("./src/server");
-server.listen(3000);
+
+server().then((app) => app.listen(3000));
