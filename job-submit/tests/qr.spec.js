@@ -1,16 +1,18 @@
 const supertest = require("supertest");
-const server = require("../src/server.js");
+const serverInit = require("../src/server.js");
 
-let app;
+let _app;
 let request;
 
 beforeAll((done) => {
-  app = server.listen(done);
-  request = supertest(app);
+  serverInit().then((app) => {
+    _app = app;
+    request = supertest(app);
+  });
 });
 
 afterAll((done) => {
-  app.close(done);
+  _app.close(done);
 });
 
 describe("QR Endpoint", () => {
