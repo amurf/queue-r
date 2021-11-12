@@ -36,8 +36,9 @@ services:
       - ./job-submit/index.js:/app/index.js:ro
       - ./job-submit/src:/app/src:ro
     environment:
-      MONGO_URI: $MONGO_URI
-      FRONTEND_HOST: $FRONTEND_HOST
+      # This syntax makes docker-compose error if the variable is undefined
+      MONGO_URI: ${MONGO_URI:?err}
+      FRONTEND_HOST: ${FRONTEND_HOST:?err}
     networks:
       - app
       - mongo
@@ -59,8 +60,9 @@ services:
     volumes:
       - ./job-update/server.js:/app/server.js:ro
     environment:
-      MONGO_URI: $MONGO_URI
-      FRONTEND_HOST: $FRONTEND_HOST
+      # This syntax makes docker-compose error if the variable is undefined
+      MONGO_URI: ${MONGO_URI:?err}
+      FRONTEND_HOST: ${FRONTEND_HOST:?err}
     networks:
       - app
       - mongo
