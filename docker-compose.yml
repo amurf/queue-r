@@ -36,8 +36,8 @@ services:
       - ./job-submit/index.js:/app/index.js:ro
       - ./job-submit/src:/app/src:ro
     environment:
-      API_MONGODB_URL: mongodb://waitoutside:thepassword@mongo:27017/waitoutside?replicaSet=replicaset
-      FRONTEND_HOST: http://localhost:8885
+      MONGO_URI: $MONGO_URI
+      FRONTEND_HOST: $FRONTEND_HOST
     networks:
       - app
       - mongo
@@ -59,8 +59,8 @@ services:
     volumes:
       - ./job-update/server.js:/app/server.js:ro
     environment:
-      API_MONGODB_URL: mongodb://waitoutside:thepassword@mongo:27017/waitoutside?replicaSet=replicaset
-      FRONTEND_HOST: http:///localhost:8885
+      MONGO_URI: $MONGO_URI
+      FRONTEND_HOST: $FRONTEND_HOST
     networks:
       - app
       - mongo
@@ -91,7 +91,7 @@ services:
   mongo_express:
     image: mongo-express
     environment:
-      ME_CONFIG_MONGODB_URL: mongodb://waitoutside:thepassword@mongo:27017/waitoutside?replicaSet=replicaset
+      ME_CONFIG_MONGODB_URL: $MONGO_URI
     ports:
       - 8081:8081
     networks:
