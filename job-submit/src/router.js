@@ -34,7 +34,7 @@ async function generateQR(ctx) {
 
 async function getJob(ctx) {
   const docs = await ctx.mongo
-    .db("waitoutside")
+    .db("queue-r")
     .collection("waiting")
     .find({ client: "ClientName" })
     .toArray();
@@ -56,7 +56,7 @@ async function updateJob(ctx) {
   const _id = body._id;
 
   await ctx.mongo
-    .db("waitoutside")
+    .db("queue-r")
     .collection("waiting")
     .updateOne({ _id }, { $set: { ...ctx.request.body } });
 
@@ -65,7 +65,7 @@ async function updateJob(ctx) {
 
 async function createListing(mongo, object) {
   const result = await mongo
-    .db("waitoutside")
+    .db("queue-r")
     .collection("waiting")
     .insertOne({ ...object, status: "started", created_at: new Date() });
 

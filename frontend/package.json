@@ -1,6 +1,6 @@
 {
-  "name": "waitoutside",
-  "version": "0.0.0",
+  "name": "queue-r",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vue-tsc --noEmit && vite build",

@@ -16,7 +16,7 @@ io.on("connection", async function (socket) {
 
   await client.connect();
   const doc = await client
-    .db("waitoutside")
+    .db("queue-r")
     .collection("waiting")
     .findOne({ _id: id });
 
@@ -37,7 +37,7 @@ async function startWatcher(io) {
   await client.connect();
 
   client
-    .db("waitoutside")
+    .db("queue-r")
     .collection("waiting")
     .watch([], {})
     .on("change", function (change) {

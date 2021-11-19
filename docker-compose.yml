@@ -24,7 +24,7 @@ services:
       traefik.http.routers.frontend.priority: 1001
       traefik.http.routers.frontend.middlewares: frontend@docker
       traefik.http.middlewares.frontend.stripprefix.prefixes: /
-      traefik.tags: waitoutside
+      traefik.tags: queue-r
 
 
   job-submit:
@@ -50,7 +50,7 @@ services:
       traefik.http.routers.submit.priority: 1002
       traefik.http.routers.submit.middlewares: submit@docker
       traefik.http.middlewares.submit.stripprefix.prefixes: /submit/
-      traefik.tags: waitoutside
+      traefik.tags: queue-r
 
   job-update:
     build:
@@ -74,7 +74,7 @@ services:
       traefik.http.routers.update.priority: 1002
       traefik.http.routers.update.middlewares: update@docker
       traefik.http.middlewares.update.stripprefix.prefixes: /update/
-      traefik.tags: waitoutside
+      traefik.tags: queue-r
 
   mongo:
     image: bitnami/mongodb
@@ -84,8 +84,8 @@ services:
       MONGODB_REPLICA_SET_MODE: primary
       MONGODB_REPLICA_SET_KEY: replicasetkey123
       MONGODB_ROOT_PASSWORD: thepasswordest
-      MONGODB_DATABASE: waitoutside
-      MONGODB_USERNAME: waitoutside
+      MONGODB_DATABASE: queue-r
+      MONGODB_USERNAME: queue-r
       MONGODB_PASSWORD: thepassword
     networks:
       - mongo
@@ -111,7 +111,7 @@ services:
       - --providers.docker=true
       - --providers.docker.swarmMode=false
       - --providers.docker.exposedbydefault=false
-      - --providers.docker.constraints=Label(`traefik.tags`,`waitoutside`)
+      - --providers.docker.constraints=Label(`traefik.tags`,`queue-r`)
       - --entrypoints.web.address=:80
     ports:
       - 8885:80
