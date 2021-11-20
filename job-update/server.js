@@ -21,7 +21,7 @@ io.on("connection", async function (socket) {
     .findOne({ _id: id });
 
   if (doc) {
-    socket.emit("update", "order received");
+    socket.emit("update", { status: doc.status, name: doc.name });
     socket.join(`update:${id}`);
     io.to(`close:${id}`).emit("closeWindow", true);
   } else {
