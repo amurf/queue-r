@@ -13,14 +13,16 @@ const props = defineProps({
 
 const status = ref("");
 const error = ref("");
+const name = ref("");
 
 const socket = io({
   path: "/update/socket.io/",
   query: { id: props.id },
 });
 
-socket.on("update", (newStatus) => {
-  status.value = newStatus;
+socket.on("update", (updateObj) => {
+  status.value = updateObj.status;
+  name.value = updateObj.name;
 });
 socket.on("error", (newStatus) => {
   error.value = newStatus;
@@ -57,7 +59,7 @@ document.body.style.setProperty("--colour-body", "var(--colour-primary-light)");
     </div>
 
     <p class="text-white text-xl font-bold w-4/5 text-2xl text-center">
-      We'll call you when your order is ready, sit tight!
+      We'll call you when your order is ready {{ name }}, sit tight!
     </p>
 
     <div class="grid grid-cols-2 gap-2">
