@@ -1,3 +1,16 @@
+/* @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"); */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --colour-body: theme("colors.gray.200");
+  --colour-primary-dark: #5f0e86;
+  --colour-primary-light: #6e2c8d;
+}
+
+body {
+  @apply font-sans antialiased;
+  background: var(--colour-body);
+}
