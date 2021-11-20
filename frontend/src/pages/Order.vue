@@ -3,7 +3,7 @@ import { reactive } from "vue";
 import axios from "axios";
 
 const order = reactive({
-  items: ["Flat white", "Peanut butter brownie"],
+  items: ["Flat White", "Peanut Butter Brownie"],
   client: "ClientName",
   name: "",
 });
@@ -21,38 +21,39 @@ async function submit() {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center w-full h-screen px-5">
-    <div class="p-4 mb-2 border shadow">
-      <h1 class="text-lg font-bold">Order</h1>
+  <div class="flex flex-col w-full h-screen p-4">
+    <div class="p-4 border shadow-md rounded-md bg-white">
+      <h1 class="text-lg font-bold">Your Order:</h1>
       <ul>
-        <li v-for="item in order.items">{{ item }}</li>
+        <li v-for="item in order.items">1x {{ item }}</li>
       </ul>
     </div>
 
     <form @submit.prevent="submit()" class="flex flex-col text-center">
-      <label for="name" class="text-lg font-bold">Customer name</label>
+      <!-- <label for="name" class="text-lg font-bold">Customer name</label> -->
       <input
         type="text"
         v-model="order.name"
+        placeholder="How should we call you?"
         id="name"
-        class="p-2 border shadow"
+        class="
+          text-primary-dark
+          p-2
+          mt-4
+          border
+          shadow-md
+          rounded-md
+          font-bold
+          self-center
+          text-2xl
+          w-full
+          md:w-1/2
+          text-center
+        "
       />
-
-      <button type="submit" class="border p-2 mt-2 shadow rounded bg-blue-200">
-        Submit
-      </button>
     </form>
   </div>
 </template>
 
 <style scoped>
-.qrcode-container {
-  width: 30%;
-}
-
-@media only screen and (max-width: 600px) {
-  .qrcode-container {
-    width: 100%;
-  }
-}
 </style>
