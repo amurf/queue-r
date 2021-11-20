@@ -5,6 +5,9 @@ import { io } from "socket.io-client";
 
 import axios from "axios";
 
+import Logo from "../images/logo.svg";
+import Loading from "../images/loading.svg";
+
 const props = defineProps({
   id: {
     type: String,
@@ -22,34 +25,60 @@ socket.on("closeWindow", () => window.close());
 
 const route = useRoute();
 
-// XXX: Don't hardcore this
+// XXX: Don't hardcode this
 const url = "http://localhost:8885/w/" + props.id;
 const qrCode = ref("");
 
 async function getQR() {
   let { data } = await axios.get(`/submit/qr/${route.params.id}`);
-  qrCode.value = data;
+
+  // TODO: Handle errors nicely.
+  if (!data.error) {
+    qrCode.value = data;
+  }
 }
 
 getQR();
 </script>
 
 <template>
-  <div v-if="!qrCode">Generating QR code..</div>
+  <div class="w-full h-screen flex flex-col p-4">
+    <Logo class="self-center" />
 
-  <div
-    v-else
-    class="w-full h-screen flex flex-col justify-center items-center px-5"
-  >
-    <div v-html="qrCode" class="qrcode-container"></div>
-    <p>
-      Hi {{ route.query.name }}, scan this QR code to keep track of your order,
-      we'll let you know when it's ready
-    </p>
+    <div
+      v-if="!qrCode"
+      class="flex flex-col justify-center items-center h-full"
+    >
+      <p class="font-semibold text-2xl p-4 mb-10">
+        Generating your QR code now...
+      </p>
+      <Loading />
+    </div>
 
-    <a :href="url" target="_blank">{{ url }}</a>
+    <template v-else>
+      <div
+        v-html="qrCode"
+        class="
+          bg-primary-dark
+          p-12
+          qrcode-container
+          rounded-md
+          self-center
+          w-full
+          md:w-1/2
+          mt-20
+        "
+      ></div>
+      <p class="self-center text-xl w-full md:w-3/4 p-4 mt-20 text-center">
+        Hi
+        <strong class="text-primary-dark">{{ route.query.name }}</strong>
+        , scan this QR code to keep track of your order, we'll let you know when
+        it's ready
+      </p>
+    </template>
   </div>
 </template>
+
 
 <style scoped>
 .qrcode-container {
