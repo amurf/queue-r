@@ -12,6 +12,8 @@ services:
       target: devel-builder
     volumes:
       - ./frontend/src/:/app/src
+      - ./frontend/tailwind.config.js:/app/tailwind.config.js
+      - ./frontend/vite.config.ts:/app/vite.config.ts
     ports:
       - 3000:3000 # this is for vite hot reloading
     networks:
