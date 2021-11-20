@@ -1,6 +1,6 @@
 const { MongoClient } = require("mongodb");
 const MONGO_URI = process.env.MONGO_URI;
-const client = new MongoClient(MONGO_URI);
+const ioMongoClient = new MongoClient(MONGO_URI);
 
 const { Server } = require("socket.io");
 const io = new Server(3000, {});
@@ -14,8 +14,8 @@ io.on("connection", async function (socket) {
     return;
   }
 
-  await client.connect();
-  const doc = await client
+  await ioMongoClient.connect();
+  const doc = await ioMongoClient
     .db("queue-r")
     .collection("waiting")
     .findOne({ _id: id });
@@ -28,15 +28,16 @@ io.on("connection", async function (socket) {
     socket.emit("error", "invalid id");
   }
 
-  client.close();
+  ioMongoClient.close();
 });
 
 startWatcher(io);
 
 async function startWatcher(io) {
-  await client.connect();
+  const watcherMongoClientClient = new MongoClient(MONGO_URI);
+  await watcherMongoClientClient.connect();
 
-  client
+  watcherMongoClientClient
     .db("queue-r")
     .collection("waiting")
     .watch([], {})
