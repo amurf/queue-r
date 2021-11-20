@@ -67,7 +67,7 @@ async function createListing(mongo, object) {
   const result = await mongo
     .db("queue-r")
     .collection("waiting")
-    .insertOne({ ...object, status: "started", created_at: new Date() });
+    .insertOne({ ...object, status: "In Progress", created_at: new Date() });
 
   return result;
 }
